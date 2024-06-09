@@ -1,0 +1,32 @@
+[
+    {
+        "username": "user1",
+        "top_artists": ["Artist1", "Artist2", "Artist3", "Artist4", "Artist5", "Artist6", "Artist7"],
+        "top_songs": ["Song1", "Song2", "Song3", "Song4", "Song5", "Song6", "Song7"],
+        "genres": ["Pop", "Rock", "Hip-Hop"]
+    },
+    {
+        "username": "user2",
+        "top_artists": ["Artist3", "Artist2", "Artist8", "Artist5", "Artist9"],
+        "top_songs": ["Song2", "Song5", "Song8", "Song3"],
+        "genres": ["Pop", "Jazz"]
+    },
+    {
+        "username": "user3",
+        "top_artists": ["Artist10", "Artist11", "Artist1", "Artist7", "Artist4"],
+        "top_songs": ["Song9", "Song6", "Song7", "Song1"],
+        "genres": ["Classical", "Rock"]
+    },
+    {
+        "username": "user4",
+        "top_artists": ["Artist12", "Artist13", "Artist14", "Artist15", "Artist5"],
+        "top_songs": ["Song10", "Song11", "Song12", "Song5"],
+        "genres": ["Hip-Hop", "Jazz"]
+    },
+    {
+        "username": "user5",
+        "top_artists": ["Artist16", "Artist17", "Artist18", "Artist19", "Artist6"],
+        "top_songs": ["Song13", "Song14", "Song15", "Song6"],
+        "genres": ["Pop", "Classical"]
+    }
+]
