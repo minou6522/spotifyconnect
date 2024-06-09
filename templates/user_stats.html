@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>{{ user_data.username }}'s Stats</title>
     <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
@@ -87,57 +87,26 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome, {{ user_data.username }}</h1>
+        <h1>{{ user_data.username }}'s Stats</h1>
         
-        <h2>Your Top Artists</h2>
+        <h2>Top Artists</h2>
         <ul>
-            {% for artist in user_data.top_artists[:5] %}
+            {% for artist in user_data.top_artists %}
                 <li>{{ artist }}</li>
             {% endfor %}
         </ul>
-        {% if user_data.top_artists|length > 5 %}
-            <button id="artists-btn" class="toggle-btn" onclick="toggleDropdown('artists-dropdown', 'artists-btn')">Show More</button>
-            <ul class="dropdown" id="artists-dropdown">
-                {% for artist in user_data.top_artists[5:] %}
-                    <li>{{ artist }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
 
-        <h2>Your Top Songs</h2>
+        <h2>Top Songs</h2>
         <ul>
-            {% for song in user_data.top_songs[:5] %}
+            {% for song in user_data.top_songs %}
                 <li>{{ song }}</li>
             {% endfor %}
         </ul>
-        {% if user_data.top_songs|length > 5 %}
-            <button id="songs-btn" class="toggle-btn" onclick="toggleDropdown('songs-dropdown', 'songs-btn')">Show More</button>
-            <ul class="dropdown" id="songs-dropdown">
-                {% for song in user_data.top_songs[5:] %}
-                    <li>{{ song }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
 
-        <h2>Your Top Genres</h2>
+        <h2>Genres</h2>
         <ul>
-            {% for genre in user_data.genres[:5] %}
+            {% for genre in user_data.genres %}
                 <li>{{ genre }}</li>
-            {% endfor %}
-        </ul>
-        {% if user_data.genres|length > 5 %}
-            <button id="genres-btn" class="toggle-btn" onclick="toggleDropdown('genres-dropdown', 'genres-btn')">Show More</button>
-            <ul class="dropdown" id="genres-dropdown">
-                {% for genre in user_data.genres[5:] %}
-                    <li>{{ genre }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-
-        <h2>Similar Users</h2>
-        <ul>
-            {% for i, (user, similarity) in enumerate(similar_users) %}
-                <li>{{ i+1 }}. <a href="{{ url_for('user_stats', username=user) }}">{{ user }}</a> - {{ '%.2f' % similarity }}%</li>
             {% endfor %}
         </ul>
     </div>

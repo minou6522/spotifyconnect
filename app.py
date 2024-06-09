@@ -93,9 +93,19 @@ def dashboard():
 
     users_data[username] = user_data
 
-    similar_users = find_similar_users(user_data)
+    similar_users = find_similar_users(user_data, username)
 
-    return render_template('dashboard.html', user_data=user_data, similar_users=similar_users)
+    return render_template('dashboard.html', user_data=user_data, similar_users=similar_users, enumerate=enumerate)
+
+
+
+@app.route('/user/<username>')
+def user_stats(username):
+    if username not in users_data:
+        return "User not found", 404
+
+    user_data = users_data[username]
+    return render_template('user_stats.html', user_data=user_data)
 
 # Create a model to calculate similarity scores (placeholder)
 def build_model():
@@ -137,7 +147,8 @@ def create_vector(data, artist_to_index, song_to_index, genre_to_index, num_top_
     return np.array(artist_vector + song_vector + genre_vector)
 
 # Find similar users based on user data
-def find_similar_users(user_data):
+# Find similar users based on user data
+def find_similar_users(user_data, current_username):
     num_top_artists = 5
     num_top_songs = 5
     num_genres = 5
@@ -149,6 +160,8 @@ def find_similar_users(user_data):
     similarities = {}
 
     for username, data in users_data.items():
+        if username == current_username:
+            continue
         data_vector = create_vector(data, artist_to_index, song_to_index, genre_to_index, num_top_artists, num_top_songs, num_genres)
         
         # Calculate similarity as dot product
@@ -156,7 +169,8 @@ def find_similar_users(user_data):
         similarities[username] = similarity
     
     sorted_users = sorted(similarities.items(), key=lambda x: x[1], reverse=True)
-    return [user for user, sim in sorted_users if sim > 0.5][:5]
+    return [(user, sim * 100) for user, sim in sorted_users if sim > 0.5][:5]
+
 
 if __name__ == '__main__':
     app.run(debug=True)
