@@ -44,6 +44,10 @@ def load_user_data():
 
 users_data = load_user_data()
 
+# In-memory store for following relationships and messages
+following = {}
+messages = {}
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -65,6 +69,15 @@ def callback():
     }).json()
 
     session['token_info'] = auth_response
+
+    headers = {
+        'Authorization': f"Bearer {auth_response['access_token']}"
+    }
+
+    # Fetch user profile to get the user ID
+    user_profile = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
+    session['user_id'] = user_profile['id']
+
     return redirect(url_for('dashboard'))
 
 @app.route('/dashboard')
@@ -97,15 +110,69 @@ def dashboard():
 
     return render_template('dashboard.html', user_data=user_data, similar_users=similar_users, enumerate=enumerate)
 
+@app.route('/follow/<username>')
+def follow_user(username):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
 
+    if username not in users_data or username == current_user:
+        return "User not found or invalid operation", 404
+
+    if current_user not in following:
+        following[current_user] = set()
+
+    following[current_user].add(username)
+    return redirect(url_for('user_stats', username=username))
+
+@app.route('/unfollow/<username>')
+def unfollow_user(username):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+
+    if username not in users_data or username == current_user:
+        return "User not found or invalid operation", 404
+
+    if current_user in following and username in following[current_user]:
+        following[current_user].remove(username)
+    return redirect(url_for('user_stats', username=username))
+
+@app.route('/messages')
+def view_messages():
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+
+    user_messages = messages.get(current_user, [])
+    return render_template('messages.html', messages=user_messages)
+
+@app.route('/message/<username>', methods=['GET', 'POST'])
+def send_message(username):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        message_content = request.form['message']
+        if username not in messages:
+            messages[username] = []
+        messages[username].append({'from': current_user, 'content': message_content})
+        return redirect(url_for('user_stats', username=username))
+    return render_template('send_message.html', recipient=username)
 
 @app.route('/user/<username>')
 def user_stats(username):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+
     if username not in users_data:
         return "User not found", 404
 
     user_data = users_data[username]
-    return render_template('user_stats.html', user_data=user_data)
+    is_following = username in following.get(current_user, set())
+    return render_template('user_stats.html', user_data=user_data, is_following=is_following)
 
 # Create a model to calculate similarity scores (placeholder)
 def build_model():
@@ -147,7 +214,6 @@ def create_vector(data, artist_to_index, song_to_index, genre_to_index, num_top_
     return np.array(artist_vector + song_vector + genre_vector)
 
 # Find similar users based on user data
-# Find similar users based on user data
 def find_similar_users(user_data, current_username):
     num_top_artists = 5
     num_top_songs = 5
@@ -170,7 +236,6 @@ def find_similar_users(user_data, current_username):
     
     sorted_users = sorted(similarities.items(), key=lambda x: x[1], reverse=True)
     return [(user, sim * 100) for user, sim in sorted_users if sim > 0.5][:5]
-
 
 if __name__ == '__main__':
     app.run(debug=True)

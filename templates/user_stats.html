@@ -2,113 +2,19 @@
 <html>
 <head>
     <title>{{ user_data.username }}'s Stats</title>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f7f7f7;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            background-color: #fff;
-            padding: 30px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
-            border-radius: 15px;
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-            margin: 20px;
-            color: #333;
-        }
-        h1 {
-            color: #1DB954;
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        h2 {
-            color: #191414;
-            font-size: 20px;
-            margin-top: 30px;
-            margin-bottom: 10px;
-            text-decoration: underline;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-        li {
-            background-color: #f0f0f0;
-            margin: 5px 0;
-            padding: 15px;
-            border-radius: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            color: #333;
-        }
-        li:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .dropdown {
-            display: none;
-            margin-top: 10px;
-        }
-        .toggle-btn {
-            cursor: pointer;
-            padding: 10px;
-            background-color: #1DB954;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-        .toggle-btn:hover {
-            background-color: #17a34a;
-        }
-    </style>
-    <script>
-        function toggleDropdown(id, buttonId) {
-            var dropdown = document.getElementById(id);
-            var button = document.getElementById(buttonId);
-            if (dropdown.style.display === "none" || dropdown.style.display === "") {
-                dropdown.style.display = "block";
-                button.textContent = "Show Less";
-            } else {
-                dropdown.style.display = "none";
-                button.textContent = "Show More";
-            }
-        }
-    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>{{ user_data.username }}'s Stats</h1>
-        
-        <h2>Top Artists</h2>
-        <ul>
-            {% for artist in user_data.top_artists %}
-                <li>{{ artist }}</li>
-            {% endfor %}
-        </ul>
+    <h1>{{ user_data.username }}'s Stats</h1>
+    <p>Top Artists: {{ user_data.top_artists }}</p>
+    <p>Top Songs: {{ user_data.top_songs }}</p>
+    <p>Genres: {{ user_data.genres }}</p>
 
-        <h2>Top Songs</h2>
-        <ul>
-            {% for song in user_data.top_songs %}
-                <li>{{ song }}</li>
-            {% endfor %}
-        </ul>
-
-        <h2>Genres</h2>
-        <ul>
-            {% for genre in user_data.genres %}
-                <li>{{ genre }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% if is_following %}
+    <a href="{{ url_for('unfollow_user', username=user_data.username) }}">Unfollow</a>
+    {% else %}
+    <a href="{{ url_for('follow_user', username=user_data.username) }}">Follow</a>
+    {% endif %}
+    
+    <a href="{{ url_for('send_message', username=user_data.username) }}">Send Message</a>
 </body>
 </html>
