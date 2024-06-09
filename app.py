@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 import requests
 import tensorflow as tf
@@ -6,12 +9,12 @@ import os
 import json
 
 app = Flask(__name__)
-app.secret_key = "bbeda48b6d0087fae038393d95054dfd60aa5b5d6c8b7c63f082486c34b65e6e"
+app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")  # Use a default value if the key is not found
 
 # Spotify API credentials
-SPOTIPY_CLIENT_ID = '159a9b8b641942c6a4cf2caadcafd7dc'
-SPOTIPY_CLIENT_SECRET = '2f69fff0f79744fd8d40bc211a9dbbe8'
-SPOTIPY_REDIRECT_URI = 'http://localhost:5000/callback'
+SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
+SPOTIPY_CLIENT_SECRET = os.getenv('SPOTIPY_CLIENT_SECRET')
+SPOTIPY_REDIRECT_URI = os.getenv('SPOTIPY_REDIRECT_URI')
 
 # Spotify Auth URL
 SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
