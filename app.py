@@ -7,6 +7,7 @@ import tensorflow as tf
 import numpy as np
 import os
 import json
+from collections import defaultdict, Counter
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")  # Use a default value if the key is not found
@@ -34,7 +35,6 @@ def load_user_data():
         if filename.endswith('.json'):
             with open(os.path.join('data', filename)) as f:
                 data = json.load(f)
-                # Check if data is a list, and if so, iterate through it
                 if isinstance(data, list):
                     for user in data:
                         users_data[user['username']] = user
@@ -74,7 +74,6 @@ def callback():
         'Authorization': f"Bearer {auth_response['access_token']}"
     }
 
-    # Fetch user profile to get the user ID
     user_profile = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
     session['user_id'] = user_profile['id']
 
@@ -90,7 +89,6 @@ def dashboard():
         'Authorization': f"Bearer {token_info['access_token']}"
     }
 
-    # Fetch user data from Spotify
     user_profile = requests.get('https://api.spotify.com/v1/me', headers=headers).json()
     username = user_profile['id']
 
@@ -106,9 +104,32 @@ def dashboard():
 
     users_data[username] = user_data
 
-    similar_users = find_similar_users(user_data, username)
+    if username in similarities:
+        similar_users = similarities[username]
+    else:
+        similar_users = find_similar_users(user_data, username, artist_to_index, song_to_index, genre_to_index)
+        update_similarities(username, similar_users)
 
     return render_template('dashboard.html', user_data=user_data, similar_users=similar_users, enumerate=enumerate)
+
+@app.route('/top_artists')
+def top_artists():
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+
+    token_info = session.get('token_info')
+    if not token_info:
+        return redirect(url_for('index'))
+
+    headers = {
+        'Authorization': f"Bearer {token_info['access_token']}"
+    }
+
+    top_artists = requests.get('https://api.spotify.com/v1/me/top/artists', headers=headers).json()
+    
+    return render_template('top_artists.html', top_artists=top_artists)
+
 
 @app.route('/follow/<username>')
 def follow_user(username):
@@ -174,18 +195,15 @@ def user_stats(username):
     is_following = username in following.get(current_user, set())
     return render_template('user_stats.html', user_data=user_data, is_following=is_following)
 
-# Create a model to calculate similarity scores (placeholder)
-def build_model():
+def build_similarity_model(input_dim):
     model = tf.keras.Sequential([
-        tf.keras.layers.Dense(64, activation='relu', input_shape=(15,)),  # Assuming 5 top artists, 5 top songs, 5 genres
+        tf.keras.layers.Dense(128, activation='relu', input_shape=(input_dim,)),
         tf.keras.layers.Dense(64, activation='relu'),
-        tf.keras.layers.Dense(1, activation='sigmoid')  # For similarity score
+        tf.keras.layers.Dense(1, activation='sigmoid')  # Output a similarity score between 0 and 1
     ])
-    
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     return model
 
-# Create mappings for artists, songs, and genres
 def create_mappings(users_data):
     all_artists = set()
     all_songs = set()
@@ -202,40 +220,153 @@ def create_mappings(users_data):
 
     return artist_to_index, song_to_index, genre_to_index
 
-# Pad the list with pad_value to ensure it has the given length
-def pad_list(input_list, length, pad_value=0):
-    return input_list[:length] + [pad_value] * (length - len(input_list))
+def create_vector(data, artist_to_index, song_to_index, genre_to_index):
+    artist_vector = np.zeros(len(artist_to_index))
+    song_vector = np.zeros(len(song_to_index))
+    genre_vector = np.zeros(len(genre_to_index))
 
-# Create a numerical vector for a user's data
-def create_vector(data, artist_to_index, song_to_index, genre_to_index, num_top_artists, num_top_songs, num_genres):
-    artist_vector = pad_list([artist_to_index[artist] for artist in data['top_artists']], num_top_artists)
-    song_vector = pad_list([song_to_index[song] for song in data['top_songs']], num_top_songs)
-    genre_vector = pad_list([genre_to_index[genre] for genre in data['genres']], num_genres)
-    return np.array(artist_vector + song_vector + genre_vector)
-
-# Find similar users based on user data
-def find_similar_users(user_data, current_username):
-    num_top_artists = 5
-    num_top_songs = 5
-    num_genres = 5
-
-    artist_to_index, song_to_index, genre_to_index = create_mappings(users_data)
+    for artist in data['top_artists']:
+        if artist in artist_to_index:
+            artist_vector[artist_to_index[artist]] = 1
     
-    user_vector = create_vector(user_data, artist_to_index, song_to_index, genre_to_index, num_top_artists, num_top_songs, num_genres)
+    for song in data['top_songs']:
+        if song in song_to_index:
+            song_vector[song_to_index[song]] = 1
 
+    for genre in data['genres']:
+        if genre in genre_to_index:
+            genre_vector[genre_to_index[genre]] = 1
+
+    return np.concatenate([artist_vector, song_vector, genre_vector])
+
+def train_similarity_model(users_data, artist_to_index, song_to_index, genre_to_index):
+    user_vectors = []
+    labels = []
+
+    usernames = list(users_data.keys())
+    for i in range(len(usernames)):
+        for j in range(i + 1, len(usernames)):
+            user_vector_i = create_vector(users_data[usernames[i]], artist_to_index, song_to_index, genre_to_index)
+            user_vector_j = create_vector(users_data[usernames[j]], artist_to_index, song_to_index, genre_to_index)
+            combined_vector = np.abs(user_vector_i - user_vector_j)
+            user_vectors.append(combined_vector)
+            labels.append(1 if combined_vector.sum() == 0 else 0)  # Simple label assignment for similar and different users
+
+    user_vectors = np.array(user_vectors)
+    labels = np.array(labels)
+
+    model = build_similarity_model(user_vectors.shape[1])
+    model.fit(user_vectors, labels, epochs=10, batch_size=32)  # Adjust epochs and batch_size as needed
+
+    return model
+from sklearn.metrics.pairwise import cosine_similarity
+
+def calculate_similarity(vector1, vector2):
+    return cosine_similarity([vector1], [vector2])[0][0]
+
+def find_similar_users(user_data, current_username, artist_to_index, song_to_index, genre_to_index):
+    user_vector = create_vector(user_data, artist_to_index, song_to_index, genre_to_index)
     similarities = {}
 
     for username, data in users_data.items():
         if username == current_username:
             continue
-        data_vector = create_vector(data, artist_to_index, song_to_index, genre_to_index, num_top_artists, num_top_songs, num_genres)
-        
-        # Calculate similarity as dot product
-        similarity = np.dot(user_vector, data_vector) / (np.linalg.norm(user_vector) * np.linalg.norm(data_vector))
+        data_vector = create_vector(data, artist_to_index, song_to_index, genre_to_index)
+        similarity = calculate_similarity(user_vector, data_vector)
         similarities[username] = similarity
-    
+
     sorted_users = sorted(similarities.items(), key=lambda x: x[1], reverse=True)
-    return [(user, sim * 100) for user, sim in sorted_users if sim > 0.5][:5]
+    return [(user, sim * 100) for user, sim in sorted_users][:10]
+
+import pickle
+
+def save_similarities(similarities, filename='similarities.pkl'):
+    with open(filename, 'wb') as f:
+        pickle.dump(similarities, f)
+
+def load_similarities(filename='similarities.pkl'):
+    if os.path.exists(filename):
+        with open(filename, 'rb') as f:
+            return pickle.load(f)
+    return {}
+
+similarities = load_similarities()
+
+def update_similarities(username, similar_users):
+    similarities[username] = similar_users
+    save_similarities(similarities)
+
+# Add this global flag
+model_loaded = False
+
+@app.before_request
+def load_model():
+    global artist_to_index, song_to_index, genre_to_index, model, model_loaded
+    if not model_loaded:
+        artist_to_index, song_to_index, genre_to_index = create_mappings(users_data)
+        model = train_similarity_model(users_data, artist_to_index, song_to_index, genre_to_index)
+        model_loaded = True
+
+# In-memory store for comments
+comments = defaultdict(lambda: defaultdict(list))  # {username: {entity_id: [comments]}}
+
+@app.route('/comment/<entity_type>/<entity_id>', methods=['GET', 'POST'])
+def comment(entity_type, entity_id):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        comment_content = request.form['comment']
+        comments[current_user][entity_id].append({
+            'from': current_user,
+            'content': comment_content,
+            'entity_type': entity_type
+        })
+        return redirect(url_for('view_entity', entity_type=entity_type, entity_id=entity_id))
+    
+    return render_template('comment.html', entity_type=entity_type, entity_id=entity_id)
+
+@app.route('/view_entity/<entity_type>/<entity_id>')
+def view_entity(entity_type, entity_id):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+    
+    entity_comments = []
+    for user, entities in comments.items():
+        entity_comments.extend(entities.get(entity_id, []))
+    
+    return render_template('view_entity.html', entity_type=entity_type, entity_id=entity_id, comments=entity_comments)
+
+# In-memory store for likes
+likes = defaultdict(lambda: defaultdict(int))  # {entity_id: {username: count}}
+
+@app.route('/like/<entity_type>/<entity_id>')
+def like(entity_type, entity_id):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+
+    likes[entity_id][current_user] += 1
+    return redirect(url_for('view_entity', entity_type=entity_type, entity_id=entity_id))
+
+# In-memory store for ratings
+ratings = defaultdict(lambda: defaultdict(list))  # {entity_id: {username: [ratings]}}
+
+@app.route('/rate/<entity_type>/<entity_id>', methods=['GET', 'POST'])
+def rate(entity_type, entity_id):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+
+    if request.method == 'POST':
+        rating = int(request.form['rating'])
+        if 1 <= rating <= 5:
+            ratings[entity_id][current_user].append(rating)
+        return redirect(url_for('view_entity', entity_type=entity_type, entity_id=entity_id))
+    
+    return render_template('rate.html', entity_type=entity_type, entity_id=entity_id)
 
 if __name__ == '__main__':
     app.run(debug=True)

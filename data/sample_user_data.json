@@ -1,32 +1,176 @@
 [
     {
-        "username": "user1",
-        "top_artists": ["Artist1", "Artist2", "Artist3", "Artist4", "Artist5", "Artist6", "Artist7"],
-        "top_songs": ["Song1", "Song2", "Song3", "Song4", "Song5", "Song6", "Song7"],
-        "genres": ["Pop", "Rock", "Hip-Hop"]
+        "username": "Mike",
+        "top_artists": ["Kanye West", "Kendrick Lamar", "Drake", "Lil Wayne", "J. Cole", "Travis Scott", "Post Malone"],
+        "top_songs": ["Gold Digger", "HUMBLE.", "God's Plan", "Lollipop", "No Role Modelz", "SICKO MODE", "Circles"],
+        "genres": ["Hip-Hop", "Rap", "R&B", "Pop", "Trap"]
     },
     {
-        "username": "user2",
-        "top_artists": ["Artist3", "Artist2", "Artist8", "Artist5", "Artist9"],
-        "top_songs": ["Song2", "Song5", "Song8", "Song3"],
-        "genres": ["Pop", "Jazz"]
+        "username": "Sarah",
+        "top_artists": ["Taylor Swift", "Ed Sheeran", "Ariana Grande", "Shawn Mendes", "Billie Eilish"],
+        "top_songs": ["Shake It Off", "Shape of You", "Thank U, Next", "Stitches", "Bad Guy"],
+        "genres": ["Pop", "Electropop", "Dance", "Indie Pop", "Synthpop"]
     },
     {
-        "username": "user3",
-        "top_artists": ["Artist10", "Artist11", "Artist1", "Artist7", "Artist4"],
-        "top_songs": ["Song9", "Song6", "Song7", "Song1"],
-        "genres": ["Classical", "Rock"]
+        "username": "John",
+        "top_artists": ["Queen", "Led Zeppelin", "The Beatles", "Pink Floyd", "The Rolling Stones"],
+        "top_songs": ["Bohemian Rhapsody", "Stairway to Heaven", "Hey Jude", "Comfortably Numb", "Paint It Black"],
+        "genres": ["Rock", "Classic Rock", "Hard Rock", "Blues Rock", "Psychedelic Rock"]
     },
     {
-        "username": "user4",
-        "top_artists": ["Artist12", "Artist13", "Artist14", "Artist15", "Artist5"],
-        "top_songs": ["Song10", "Song11", "Song12", "Song5"],
-        "genres": ["Hip-Hop", "Jazz"]
+        "username": "Emily",
+        "top_artists": ["Adele", "Sam Smith", "Bruno Mars", "Alicia Keys", "John Legend"],
+        "top_songs": ["Hello", "Stay With Me", "Just The Way You Are", "If I Ain't Got You", "All of Me"],
+        "genres": ["Soul", "Pop", "R&B", "Ballad", "Gospel"]
     },
     {
-        "username": "user5",
-        "top_artists": ["Artist16", "Artist17", "Artist18", "Artist19", "Artist6"],
-        "top_songs": ["Song13", "Song14", "Song15", "Song6"],
-        "genres": ["Pop", "Classical"]
+        "username": "Daniel",
+        "top_artists": ["Eminem", "Jay-Z", "Nas", "Tupac Shakur", "The Notorious B.I.G."],
+        "top_songs": ["Lose Yourself", "99 Problems", "N.Y. State of Mind", "California Love", "Juicy"],
+        "genres": ["Hip-Hop", "Rap", "East Coast Hip-Hop", "West Coast Hip-Hop", "Gangsta Rap"]
+    },
+    {
+        "username": "Jessica",
+        "top_artists": ["Beyoncé", "Rihanna", "Lady Gaga", "Katy Perry", "Dua Lipa"],
+        "top_songs": ["Single Ladies", "Umbrella", "Bad Romance", "Firework", "Don't Start Now"],
+        "genres": ["Pop", "R&B", "Dance", "Electropop", "Synthpop"]
+    },
+    {
+        "username": "Alex",
+        "top_artists": ["Nirvana", "Pearl Jam", "Soundgarden", "Alice In Chains", "Foo Fighters"],
+        "top_songs": ["Smells Like Teen Spirit", "Alive", "Black Hole Sun", "Man in the Box", "Everlong"],
+        "genres": ["Grunge", "Alternative Rock", "Hard Rock", "Post-Grunge", "Alternative Metal"]
+    },
+    {
+        "username": "David",
+        "top_artists": ["The Weeknd", "Frank Ocean", "Khalid", "SZA", "Tinashe"],
+        "top_songs": ["Blinding Lights", "Thinkin Bout You", "Talk", "Love Galore", "2 On"],
+        "genres": ["R&B", "Alternative R&B", "Pop", "Soul", "Electropop"]
+    },
+    {
+        "username": "Sophia",
+        "top_artists": ["Coldplay", "Imagine Dragons", "Maroon 5", "OneRepublic", "The Killers"],
+        "top_songs": ["Viva La Vida", "Radioactive", "Sugar", "Counting Stars", "Mr. Brightside"],
+        "genres": ["Pop Rock", "Alternative Rock", "Indie Rock", "Electronic Rock", "Synthpop"]
+    },
+    {
+        "username": "Liam",
+        "top_artists": ["Drake", "Future", "Young Thug", "Lil Baby", "Gunna"],
+        "top_songs": ["God's Plan", "Life Is Good", "Hot", "Woah", "Drip Too Hard"],
+        "genres": ["Trap", "Hip-Hop", "Rap", "Southern Hip-Hop", "Pop Rap"]
+    },
+    {
+        "username": "Olivia",
+        "top_artists": ["Billie Eilish", "Lana Del Rey", "Halsey", "Lorde", "Sia"],
+        "top_songs": ["Bad Guy", "Summertime Sadness", "Without Me", "Royals", "Chandelier"],
+        "genres": ["Electropop", "Indie Pop", "Art Pop", "Alternative Pop", "Dream Pop"]
+    },
+    {
+        "username": "James",
+        "top_artists": ["Metallica", "Iron Maiden", "Slayer", "Megadeth", "Anthrax"],
+        "top_songs": ["Enter Sandman", "The Trooper", "Raining Blood", "Symphony of Destruction", "Madhouse"],
+        "genres": ["Heavy Metal", "Thrash Metal", "Speed Metal", "Hard Rock", "Progressive Metal"]
+    },
+    {
+        "username": "Isabella",
+        "top_artists": ["Selena Gomez", "Demi Lovato", "Camila Cabello", "Ariana Grande", "Miley Cyrus"],
+        "top_songs": ["Lose You to Love Me", "Sorry Not Sorry", "Havana", "7 rings", "Wrecking Ball"],
+        "genres": ["Pop", "Dance", "Electropop", "R&B", "Teen Pop"]
+    },
+    {
+        "username": "Ethan",
+        "top_artists": ["Post Malone", "Juice WRLD", "Lil Uzi Vert", "XXXTentacion", "Travis Scott"],
+        "top_songs": ["Circles", "Lucid Dreams", "XO TOUR Llif3", "SAD!", "SICKO MODE"],
+        "genres": ["Rap", "Hip-Hop", "Trap", "Emo Rap", "Pop Rap"]
+    },
+    {
+        "username": "Mia",
+        "top_artists": ["Harry Styles", "Zayn", "Niall Horan", "Liam Payne", "Louis Tomlinson"],
+        "top_songs": ["Watermelon Sugar", "PILLOWTALK", "Slow Hands", "Strip That Down", "Back to You"],
+        "genres": ["Pop", "Pop Rock", "Indie Pop", "Soft Rock", "Synthpop"]
+    },
+    {
+        "username": "Alexander",
+        "top_artists": ["Kendrick Lamar", "J. Cole", "Anderson .Paak", "Childish Gambino", "Joey Bada$$"],
+        "top_songs": ["HUMBLE.", "No Role Modelz", "Come Down", "Redbone", "DEVASTATED"],
+        "genres": ["Hip-Hop", "Rap", "Jazz Rap", "Conscious Hip-Hop", "West Coast Hip-Hop"]
+    },
+    {
+        "username": "Amelia",
+        "top_artists": ["Madonna", "Janet Jackson", "Whitney Houston", "Prince", "Michael Jackson"],
+        "top_songs": ["Like a Prayer", "Rhythm Nation", "I Will Always Love You", "Purple Rain", "Billie Jean"],
+        "genres": ["Pop", "Dance", "R&B", "Funk", "Soul"]
+    },
+    {
+        "username": "Henry",
+        "top_artists": ["Red Hot Chili Peppers", "Green Day", "Foo Fighters", "Nirvana", "The Offspring"],
+        "top_songs": ["Californication", "Basket Case", "Everlong", "Smells Like Teen Spirit", "Pretty Fly (For a White Guy)"],
+        "genres": ["Rock", "Alternative Rock", "Punk Rock", "Funk Rock", "Grunge"]
+    },
+    {
+        "username": "Zoe",
+        "top_artists": ["Adele", "Taylor Swift", "Ed Sheeran", "Sam Smith", "Billie Eilish"],
+        "top_songs": ["Hello", "Love Story", "Shape of You", "Stay With Me", "Bad Guy"],
+        "genres": ["Pop", "Soul", "Ballad", "Electropop", "Indie Pop"]
+    },
+    {
+        "username": "Jack",
+        "top_artists": ["Drake", "The Weeknd", "Kanye West", "Travis Scott", "J. Cole"],
+        "top_songs": ["God's Plan", "Blinding Lights", "Gold Digger", "SICKO MODE", "No Role Modelz"],
+        "genres": ["Hip-Hop", "Rap", "Trap", "R&B", "Pop"]
+    },
+    {
+        "username": "Lily",
+        "top_artists": ["Shawn Mendes", "Ariana Grande", "Dua Lipa", "Halsey", "Lorde"],
+        "top_songs": ["Stitches", "Thank U, Next", "Don't Start Now", "Without Me", "Royals"],
+        "genres": ["Pop", "Electropop", "Dance", "Indie Pop", "Alternative Pop"]
+    },
+    {
+        "username": "William",
+        "top_artists": ["Bob Dylan", "Neil Young", "Bruce Springsteen", "Tom Petty", "Johnny Cash"],
+        "top_songs": ["Like a Rolling Stone", "Heart of Gold", "Born to Run", "Free Fallin'", "Ring of Fire"],
+        "genres": ["Folk", "Rock", "Country", "Folk Rock", "Americana"]
+    },
+    {
+        "username": "Ella",
+        "top_artists": ["Katy Perry", "Lady Gaga", "Selena Gomez", "Britney Spears", "Christina Aguilera"],
+        "top_songs": ["Firework", "Bad Romance", "Lose You to Love Me", "Toxic", "Genie in a Bottle"],
+        "genres": ["Pop", "Dance", "Electropop", "Teen Pop", "Synthpop"]
+    },
+    {
+        "username": "Noah",
+        "top_artists": ["Linkin Park", "Evanescence", "Disturbed", "Three Days Grace", "Breaking Benjamin"],
+        "top_songs": ["In the End", "Bring Me to Life", "Down with the Sickness", "I Hate Everything About You", "The Diary of Jane"],
+        "genres": ["Alternative Metal", "Nu Metal", "Hard Rock", "Post-Grunge", "Alternative Rock"]
+    },
+    {
+        "username": "Ava",
+        "top_artists": ["Sia", "Demi Lovato", "Adele", "Billie Eilish", "Rihanna"],
+        "top_songs": ["Chandelier", "Sorry Not Sorry", "Hello", "Bad Guy", "Umbrella"],
+        "genres": ["Pop", "Electropop", "R&B", "Soul", "Dance"]
+    },
+    {
+        "username": "Logan",
+        "top_artists": ["Imagine Dragons", "OneRepublic", "Maroon 5", "Coldplay", "The Killers"],
+        "top_songs": ["Radioactive", "Counting Stars", "Sugar", "Viva La Vida", "Mr. Brightside"],
+        "genres": ["Pop Rock", "Alternative Rock", "Indie Rock", "Electronic Rock", "Synthpop"]
+    },
+    {
+        "username": "Chloe",
+        "top_artists": ["Lana Del Rey", "Billie Eilish", "Ariana Grande", "Halsey", "Lorde"],
+        "top_songs": ["Summertime Sadness", "Bad Guy", "Thank U, Next", "Without Me", "Royals"],
+        "genres": ["Electropop", "Indie Pop", "Art Pop", "Alternative Pop", "Dream Pop"]
+    },
+    {
+        "username": "Mason",
+        "top_artists": ["Eminem", "Dr. Dre", "Snoop Dogg", "Ice Cube", "Kendrick Lamar"],
+        "top_songs": ["Lose Yourself", "Still D.R.E.", "Drop It Like It's Hot", "It Was a Good Day", "HUMBLE."],
+        "genres": ["Hip-Hop", "Rap", "West Coast Hip-Hop", "Gangsta Rap", "G-Funk"]
+    },
+    {
+        "username": "Harper",
+        "top_artists": ["Beyoncé", "Rihanna", "Bruno Mars", "Alicia Keys", "John Legend"],
+        "top_songs": ["Single Ladies", "Umbrella", "Just The Way You Are", "If I Ain't Got You", "All of Me"],
+        "genres": ["Pop", "R&B", "Soul", "Dance", "Electropop"]
     }
 ]
