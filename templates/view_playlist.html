@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Playlist Details</title>
+</head>
+<body>
+    <h1>{{ playlist['name'] }}</h1>
+    <p>By: {{ playlist['owner']['display_name'] }}</p>
+    <ul>
+        {% for track in playlist['tracks']['items'] %}
+            <li>{{ track['track']['name'] }} by {{ track['track']['artists'][0]['name'] }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('playlist_routes.add_to_playlist', playlist_id=playlist['id']) }}">Add a Track</a>
+</body>
+</html>

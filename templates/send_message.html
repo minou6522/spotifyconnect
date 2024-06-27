@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Send Message to {{ recipient }}</title>
+    <meta charset="UTF-8">
+    <title>Send Message</title>
 </head>
 <body>
     <h1>Send Message to {{ recipient }}</h1>
     <form method="post">
-        <textarea name="message" placeholder="Type your message here..."></textarea>
+        <label for="message">Message:</label>
+        <textarea name="message" id="message"></textarea>
         <button type="submit">Send</button>
     </form>
 </body>

@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Messages</title>
+    <meta charset="UTF-8">
+    <title>Messages</title>
 </head>
 <body>
-    <h1>My Messages</h1>
+    <h1>Your Messages</h1>
     <ul>
         {% for message in messages %}
-        <li><strong>{{ message.from }}:</strong> {{ message.content }}</li>
+            <li><strong>{{ message['from'] }}</strong>: {{ message['content'] }}</li>
         {% endfor %}
     </ul>
 </body>

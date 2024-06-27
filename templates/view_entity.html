@@ -1,45 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>View Entity</title>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #121212;
-            color: #FFFFFF;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5);
-        }
-        .comment {
-            background-color: #333333;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Comments on {{ entity_type }} - {{ entity_id }}</h1>
-        <div>
-            {% for comment in comments %}
-                <div class="comment">
-                    <p>{{ comment.from }}: {{ comment.content }}</p>
-                </div>
-            {% endfor %}
-        </div>
-        <a href="{{ url_for('comment', entity_type=entity_type, entity_id=entity_id) }}">
-            <button>Add Comment</button>
-        </a>
-    </div>
+    <h1>Entity Details</h1>
+    <ul>
+        {% for comment in comments %}
+            <li><strong>{{ comment['from'] }}</strong>: {{ comment['content'] }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('user_routes.comment', entity_type=entity_type, entity_id=entity_id) }}">Add Comment</a>
 </body>
 </html>

@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ user_data.username }}'s Stats</title>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
 </head>
 <body>
-    <h1>{{ user_data.username }}'s Stats</h1>
-    <p>Top Artists: {{ user_data.top_artists }}</p>
-    <p>Top Songs: {{ user_data.top_songs }}</p>
-    <p>Genres: {{ user_data.genres }}</p>
+    <h1>{{ user_data['name'] }}</h1>
+    <p>Username: {{ user_data['username'] }}</p>
+    <p>Email: {{ user_data['email'] }}</p>
 
     {% if is_following %}
-    <a href="{{ url_for('unfollow_user', username=user_data.username) }}">Unfollow</a>
+        <a href="{{ url_for('user_routes.unfollow_user', username=user_data['username']) }}">Unfollow</a>
     {% else %}
-    <a href="{{ url_for('follow_user', username=user_data.username) }}">Follow</a>
+        <a href="{{ url_for('user_routes.follow_user', username=user_data['username']) }}">Follow</a>
     {% endif %}
-    
-    <a href="{{ url_for('send_message', username=user_data.username) }}">Send Message</a>
+
+    <a href="{{ url_for('user_routes.send_message', username=user_data['username']) }}">Send Message</a>
 </body>
 </html>

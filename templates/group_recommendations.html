@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Recommendations</title>
+</head>
+<body>
+    <h1>Recommendations for {{ group_name }}</h1>
+    <ul>
+        {% for recommendation in recommendations %}
+            <li><strong>{{ recommendation['from'] }}</strong>: {{ recommendation['content'] }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('group_routes.recommend_to_group', group_name=group_name) }}">Add Recommendation</a>
+</body>
+</html>

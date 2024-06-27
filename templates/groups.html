@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Groups</title>
+</head>
+<body>
+    <h1>Your Groups</h1>
+    <ul>
+        {% for group in groups %}
+            <li><a href="{{ url_for('group_routes.view_group_recommendations', group_name=group) }}">{{ group }}</a></li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('group_routes.create_group') }}">Create New Group</a>
+</body>
+</html>
