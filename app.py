@@ -8,9 +8,21 @@ import numpy as np
 import os
 import json
 from collections import defaultdict, Counter
+from config import Config
+from routes import user_routes, playlist_routes, recommendation_routes, group_routes
+
+
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")  # Use a default value if the key is not found
+app.config.from_object(Config)
+app.register_blueprint(user_routes, url_prefix='/user')
+app.register_blueprint(playlist_routes, url_prefix='/playlist')
+app.register_blueprint(recommendation_routes, url_prefix='/recommend')
+app.register_blueprint(group_routes, url_prefix='/group')
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 # Spotify API credentials
 SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
