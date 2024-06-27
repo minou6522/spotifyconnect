@@ -26,9 +26,7 @@
             color: #FFFFFF;
             transition: transform 0.3s ease;
         }
-        .container:hover {
-            transform: scale(1.05);
-        }
+
         h1, h2 {
             color: #1DB954;
             text-transform: uppercase;
@@ -51,7 +49,7 @@
         }
         li:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         .dropdown {
             display: none;
@@ -69,7 +67,6 @@
         }
         .toggle-btn:hover {
             background-color: #17a34a;
-            transform: scale(1.05);
         }
         .top-artists-btn {
             margin-top: 20px;
@@ -107,6 +104,7 @@
     <div class="container">
         <h1>Welcome, {{ user_data.username }}</h1>
 
+        <!-- Top Artists Section -->
         <h2>Your Top Artists</h2>
         <ul>
             {% for artist in user_data.top_artists %}
@@ -120,10 +118,7 @@
             {% endfor %}
         </ul>
         <ul>
-            {% for artist in user_data.top_artists[:5] %}
-                <li>{{ artist }}</li>
-            {% endfor %}
-        </ul>
+
         {% if user_data.top_artists|length > 5 %}
             <button id="artists-btn" class="toggle-btn" onclick="toggleDropdown('artists-dropdown', 'artists-btn')">Show More</button>
             <ul class="dropdown" id="artists-dropdown">
@@ -133,6 +128,7 @@
             </ul>
         {% endif %}
 
+        <!-- Top Songs Section -->
         <h2>Your Top Songs</h2>
         <ul>
             {% for song in user_data.top_songs[:5] %}
@@ -148,6 +144,7 @@
             </ul>
         {% endif %}
 
+        <!-- Top Genres Section -->
         <h2>Your Top Genres</h2>
         <ul>
             {% for genre in user_data.genres[:5] %}
@@ -163,13 +160,14 @@
             </ul>
         {% endif %}
 
+        <!-- Similar Users Section -->
         <h2>Similar Users</h2>
         <ul>
             {% for i, (user, similarity) in enumerate(similar_users) %}
                 <li>{{ i+1 }}. <a href="{{ url_for('user_stats', username=user) }}">{{ user }}</a> - {{ '%.2f' % similarity }}%</li>
             {% endfor %}
         </ul>
-        
+
         <a href="{{ url_for('top_artists') }}" class="top-artists-btn">
             <button class="toggle-btn">See Top Artists of All Time</button>
         </a>
