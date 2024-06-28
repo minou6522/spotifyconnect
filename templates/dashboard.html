@@ -85,6 +85,20 @@
             border-radius: 10px;
             margin-bottom: 10px;
         }
+        .view-playlist-btn {
+            display: block;
+            margin: 20px auto;
+            background-color: #1DB954;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .view-playlist-btn:hover {
+            background-color: #17a34a;
+        }
     </style>
     <script>
         function toggleDropdown(id, buttonId) {
@@ -103,6 +117,8 @@
 <body>
     <div class="container">
         <h1>Welcome, {{ user_data.username }}</h1>
+
+        <a href="{{ url_for('view_playlist', playlist_id='your_playlist_id_here') }}" class="view-playlist-btn">View Playlist</a>
 
         <!-- Top Artists Section -->
         <h2>Your Top Artists</h2>

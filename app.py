@@ -11,8 +11,6 @@ from collections import defaultdict, Counter
 from config import Config
 from routes import user_routes, playlist_routes, recommendation_routes, group_routes
 
-
-
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")  # Use a default value if the key is not found
 app.config.from_object(Config)
@@ -69,6 +67,7 @@ def login():
     auth_url = f"{SPOTIFY_AUTH_URL}?response_type=code&client_id={SPOTIPY_CLIENT_ID}&scope={SCOPE}&redirect_uri={SPOTIPY_REDIRECT_URI}"
     return redirect(auth_url)
 
+@app.route('/callback')
 @app.route('/callback')
 def callback():
     auth_token = request.args['code']
@@ -291,7 +290,6 @@ def find_similar_users(user_data, current_username, artist_to_index, song_to_ind
     return [(user, sim * 100) for user, sim in sorted_users][:10]
 
 import pickle
-
 def save_similarities(similarities, filename='similarities.pkl'):
     with open(filename, 'wb') as f:
         pickle.dump(similarities, f)
@@ -379,6 +377,68 @@ def rate(entity_type, entity_id):
         return redirect(url_for('view_entity', entity_type=entity_type, entity_id=entity_id))
     
     return render_template('rate.html', entity_type=entity_type, entity_id=entity_id)
+@app.route('/create_playlist')
+def create_playlist():
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+    return render_template('create_playlist.html')
+
+@app.route('/recommendations')
+def recommendations():
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+    return render_template('recommendations.html')
+
+@app.route('/create_groups')
+def create_groups():
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+    return render_template('create_groups.html')
+
+@app.route('/add_to_playlist')
+def add_to_playlist():
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+    return render_template('add_to_playlist.html')
+
+@app.route('/group_recommendations')
+def group_recommendations():
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+    return render_template('group_recommendations.html')
+
+@app.route('/recommended_to_group')
+def recommended_to_group():
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+    return render_template('recommended_to_group.html')
+
+
+@app.route('/view_playlist/<playlist_id>')
+def view_playlist(playlist_id):
+    current_user = session.get('user_id')
+    if not current_user:
+        return redirect(url_for('index'))
+
+    # Fetch playlist details from Spotify API
+    token_info = session.get('token_info')
+    if not token_info:
+        return redirect(url_for('index'))
+
+    headers = {
+        'Authorization': f"Bearer {token_info['access_token']}"
+    }
+
+    playlist = requests.get(f'https://api.spotify.com/v1/playlists/{playlist_id}', headers=headers).json()
+
+    return render_template('view_playlist.html', playlist=playlist)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
